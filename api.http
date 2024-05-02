@@ -2,14 +2,14 @@ POST http://localhost:3333/events
 Content-Type: application/json
 
 {
-  "title": "Unite Summit",
+  "title": "Unite Summit matheus",
   "details": "Um evento para apaixonados",
   "maximumAttendees": 100
 }
 
 ###
 
-POST http://localhost:3333/events/24a2ae6b-1bea-45ab-8adc-ff7d1ef16983/attendees
+POST http://localhost:3333/events/95b2fdfd-832b-4c8c-9680-05717c54c6d8/attendees
 Content-Type: application/json
 
 {
@@ -19,17 +19,16 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3333/events/24a2ae6b-1bea-45ab-8adc-ff7d1ef16983
-
-
-###
-
-GET http://localhost:3333/attendees/3/badge
+GET http://localhost:3333/events/95b2fdfd-832b-4c8c-9680-05717c54c6d8
 
 ###
 
-POST http://localhost:3333/attendees/3/check-in
+GET http://localhost:3333/attendees/5/badge
 
 ###
 
-GET http://localhost:3333/events/24a2ae6b-1bea-45ab-8adc-ff7d1ef16983/attendees?query=Matheus
+POST http://localhost:3333/attendees/5/check-in
+
+###
+
+GET http://localhost:3333/events/95b2fdfd-832b-4c8c-9680-05717c54c6d8/attendees?query=Matheus

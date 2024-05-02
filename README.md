@@ -89,3 +89,8 @@ CREATE UNIQUE INDEX "check_ins_attendeeId_key" ON "check_ins"("attendeeId");
 ``` 
 npx prisma migrate dev
 ```
+
+#### Seed database
+```
+npx prisma db seed
+```
