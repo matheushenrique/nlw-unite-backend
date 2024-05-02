@@ -1,0 +1,27 @@
+POST http://localhost:3333/events
+Content-Type: application/json
+
+{
+  "title": "Unite Summit",
+  "details": "Um evento para apaixonados",
+  "maximumAttendees": 100
+}
+
+###
+
+POST http://localhost:3333/events/24a2ae6b-1bea-45ab-8adc-ff7d1ef16983/attendees
+Content-Type: application/json
+
+{
+  "name": "Matheus Henrique",
+  "email": "mathes@test.com"
+}
+
+###
+
+GET http://localhost:3333/events/24a2ae6b-1bea-45ab-8adc-ff7d1ef16983
+
+
+###
+
+GET http://localhost:3333/attendees/3/badge
