@@ -13,15 +13,26 @@ export async function getEventAttendees(app: FastifyInstance) {
           eventId: z.string().uuid()
         }),
         querystring: z.object({
-          pageIndex: z.string().nullable().default('0').transform(Number),
+          pageIndex: z.string().nullish().default('0').transform(Number),
+          query: z.string().nullish(),
         }),
         response: {
-      
+          200: z.object({
+            attendees: z.array(
+              z.object({
+                id: z.number(),
+                name: z.string(),
+                email: z.string().email(),
+                createdAt: z.date(),
+                checkedInAt: z.date().nullable()
+              })
+            )
+          })
         }
       }
     }, async (req, res) => {
       const { eventId } = req.params
-      const { pageIndex } = req.query
+      const { pageIndex, query } = req.query
 
       const numberOfRecordForPage = 10
 
@@ -37,11 +48,19 @@ export async function getEventAttendees(app: FastifyInstance) {
             }
           }
         },
-        where: {
+        where: query ? {
           eventId,
+          name: {
+            contains: query
+          }
+        }: {
+          eventId,          
         },
         take: numberOfRecordForPage,
-        skip: pageIndex * numberOfRecordForPage
+        skip: pageIndex * numberOfRecordForPage,
+        orderBy: {
+          createdAt: 'desc'
+        }
       })
 
       return res.send({
@@ -53,7 +72,7 @@ export async function getEventAttendees(app: FastifyInstance) {
             name, 
             email, 
             createdAt, 
-            checkInAt: checkIn?.createdAt
+            checkedInAt: checkIn?.createdAt ?? null
           }
         })
       })

@@ -32,4 +32,4 @@ POST http://localhost:3333/attendees/3/check-in
 
 ###
 
-GET http://localhost:3333/events/24a2ae6b-1bea-45ab-8adc-ff7d1ef16983/attendees
+GET http://localhost:3333/events/24a2ae6b-1bea-45ab-8adc-ff7d1ef16983/attendees?query=Matheus
