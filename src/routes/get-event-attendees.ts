@@ -28,7 +28,8 @@ export async function getEventAttendees(app: FastifyInstance) {
                 createdAt: z.date(),
                 checkedInAt: z.date().nullable()
               })
-            )
+            ),
+            total: z.number(),
           })
         }
       }
@@ -38,32 +39,44 @@ export async function getEventAttendees(app: FastifyInstance) {
 
       const numberOfRecordForPage = 10
 
-      const attendees = await prisma.attendee.findMany({
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          createdAt: true,
-          checkIn: {
-            select: {
-              createdAt: true,
+      const [attendees, total] = await Promise.all([
+        prisma.attendee.findMany({
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            createdAt: true,
+            checkIn: {
+              select: {
+                createdAt: true,
+              }
             }
+          },
+          where: query ? {
+            eventId,
+            name: {
+              contains: query
+            }
+          }: {
+            eventId,          
+          },
+          take: numberOfRecordForPage,
+          skip: pageIndex * numberOfRecordForPage,
+          orderBy: {
+            createdAt: 'desc'
           }
-        },
-        where: query ? {
-          eventId,
-          name: {
-            contains: query
-          }
-        }: {
-          eventId,          
-        },
-        take: numberOfRecordForPage,
-        skip: pageIndex * numberOfRecordForPage,
-        orderBy: {
-          createdAt: 'desc'
-        }
-      })
+        }),
+        prisma.attendee.count({
+          where: query ? {
+            eventId,
+            name: {
+              contains: query,
+            }
+          } : {
+            eventId,
+          },
+        })
+      ])
 
       return res.send({
         attendees: attendees.map(el => {
@@ -76,7 +89,8 @@ export async function getEventAttendees(app: FastifyInstance) {
             createdAt, 
             checkedInAt: checkIn?.createdAt ?? null
           }
-        })
+        }),
+        total
       })
 
     })
